@@ -3,13 +3,17 @@ $(document).ready(function () {
     var characters = ["Mario", "Link", "Kirby"];
 
     //create inital buttons for each character in array
-    characters.forEach(function (character) {
-        var button = $("<button></button>");
-        button.attr("data-character", character);
-        button.addClass("btn btn-success characterButton");
-        button.text(character);
-        $(".buttons").append(button);
-    });
+    function initializePage() {
+        characters.forEach(function (character) {
+            var button = $("<button></button>");
+            button.attr("data-character", character);
+            button.addClass("btn btn-success characterButton");
+            button.text(character);
+            $(".buttons").append(button);
+        });
+    }
+
+    initializePage();
 
     //function to create a new button for each added character from user input
     function createNewButton(character) {
@@ -24,16 +28,22 @@ $(document).ready(function () {
     $(".add-topic").on("click", function (event) {
         event.preventDefault();
         var addedCharacter = $(".characterName").val().trim();
+        if (!addedCharacter) {
+            return;
+        }
         characters.push(addedCharacter);
         createNewButton(addedCharacter);
         $(".characterName").val("");
+        console.log(characters);
     });
+
 
     //ajax request on click of button
     $(".characterButton").on("click", function (event) {
         event.preventDefault();
         var characterClicked = $(this).attr("data-character");
-        //generate queryURL based off of character clicked
+        console.log(characterClicked);
+        // generate queryURL based off of character clicked
         var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=6OTeM7Wus3Hb5inxP7JTjEDgKaVE7sBS&q=" + characterClicked + "&limit=10";
         console.log(queryURL);
 
