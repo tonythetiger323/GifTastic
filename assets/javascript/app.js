@@ -34,7 +34,6 @@ $(function () {
         characters.push(addedCharacter);
         createNewButton(addedCharacter);
         $(".characterName").val("");
-        console.log(characters);
     });
 
 
@@ -43,16 +42,15 @@ $(function () {
         $(".gifs").empty();
         event.preventDefault();
         var characterClicked = $(this).attr("data-character");
-        console.log(characterClicked);
+
         // generate queryURL based off of character clicked
         var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=6OTeM7Wus3Hb5inxP7JTjEDgKaVE7sBS&q=" + characterClicked + "&limit=10";
-        console.log(queryURL);
 
         $.ajax({
             url: queryURL,
             method: "GET"
         }).then(function (response) {
-            console.log(response);
+
             var results = response.data;
             //display results as still images with rating
             results.forEach(function (result) {
