@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
     // variable for topics array
     var characters = ["Mario", "Link", "Kirby"];
 
@@ -28,7 +28,7 @@ $(document).ready(function () {
     $(".add-topic").on("click", function (event) {
         event.preventDefault();
         var addedCharacter = $(".characterName").val().trim();
-        if (!addedCharacter) {
+        if ((!addedCharacter) || characters.includes(addedCharacter)) {
             return;
         }
         characters.push(addedCharacter);
@@ -39,7 +39,8 @@ $(document).ready(function () {
 
 
     //ajax request on click of button
-    $(".characterButton").on("click", function (event) {
+    $(".buttons").on("click", '.characterButton', function (event) {
+        $(".gifs").empty();
         event.preventDefault();
         var characterClicked = $(this).attr("data-character");
         console.log(characterClicked);
@@ -55,22 +56,43 @@ $(document).ready(function () {
             var results = response.data;
             //display results as still images with rating
             results.forEach(function (result) {
-                var gifDiv = $('<div class="d-md-inline-block"></div>');
+                var gifDiv = $('<div></div>');
                 var rating = result.rating;
                 var p = $("<p></p>").text("Rating: " + rating);
 
                 var characterImage = $("<img>");
-                characterImage.attr("src", result.images.fixed_height_small_still.url);
+                characterImage.attr({ "src": result.images.original_still.url, "data-still": result.images.original_still.url, "data-animate": result.images.original.url, "data-state": "still" });
+                characterImage.addClass("gif");
 
                 gifDiv.prepend(p);
                 gifDiv.prepend(characterImage);
 
                 $(".gifs").prepend(gifDiv);
 
+
+            });
+            //start/stop gif animation on click
+            $(".gif").on("click", function () {
+                var state = $(this).attr("data-state");
+
+                if (state === "still") {
+                    $(this).attr("src", $(this).attr("data-animate"));
+                    $(this).attr("data-state", "animate");
+                } else {
+                    $(this).attr("src", $(this).attr("data-still"));
+                    $(this).attr("data-state", "still");
+                }
             });
 
+
         });
+
+
     });
+
+
+
+
 
 });
 
